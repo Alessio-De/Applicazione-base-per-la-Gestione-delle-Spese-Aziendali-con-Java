@@ -1,0 +1,148 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+// Classe che rappresenta una singola spesa
+class Expense {
+    private String description;
+    private double amount;
+    private String category;
+
+    public Expense(String description, double amount, String category) {
+        this.description = description;
+        this.amount = amount;
+        this.category = category;
+    }
+
+    // Getter e setter per accedere ai campi della spesa
+    public String getDescription() { return description; }
+    public double getAmount() { return amount; }
+    public String getCategory() { return category; }
+}
+
+public class OfficeExpenseManager {
+    private static ArrayList<Expense> expenses = new ArrayList<>();
+    private static Scanner scanner = new Scanner(System.in);
+
+    public static void main(String[] args) {
+        // Commenti:
+        // 1. Definiamo una classe "Expense" per rappresentare una singola spesa, con campi per la descrizione, l'importo e la categoria.
+        // 2. Creiamo un ArrayList per memorizzare tutte le spese.
+        // 3. Creiamo uno Scanner per leggere l'input dell'utente.
+
+        int choice;
+        do {
+            // Mostriamo il menu delle opzioni
+            showMenu();
+            choice = scanner.nextInt();
+            scanner.nextLine(); // Consumiamo il carattere newline
+
+            switch (choice) {
+                case 1:
+                    addExpense();
+                    break;
+                case 2:
+                    viewExpenses();
+                    break;
+                case 3:
+                    viewExpensesByCategory();
+                    break;
+                case 4:
+                    calculateTotalExpenses();
+                    break;
+                case 5:
+                    System.out.println("Arrivederci!");
+                    break;
+                default:
+                    System.out.println("Scelta non valida. Riprova.");
+                    break;
+            }
+        } while (choice != 5);
+    }
+
+    private static void showMenu() {
+        // Commenti:
+        // 4. Definiamo un metodo per visualizzare il menu delle opzioni all'utente.
+        System.out.println("\nGestione Spese Aziendali:");
+        System.out.println("1. Aggiungi Spesa");
+        System.out.println("2. Visualizza Tutte le Spese");
+        System.out.println("3. Visualizza Spese per Categoria");
+        System.out.println("4. Calcola Spese Totali");
+        System.out.println("5. Esci");
+        System.out.print("Scegli un'opzione: ");
+    }
+
+    private static void addExpense() {
+        // Commenti:
+        // 5. Definiamo un metodo per aggiungere una nuova spesa all'elenco.
+        // 6. Chiediamo all'utente di inserire i dettagli della spesa (descrizione, importo, categoria).
+        // 7. Creiamo un nuovo oggetto Expense e lo aggiungiamo all'ArrayList.
+        System.out.print("Inserisci la descrizione della spesa: ");
+        String description = scanner.nextLine();
+        System.out.print("Inserisci l'importo della spesa: ");
+        double amount = scanner.nextDouble();
+        scanner.nextLine(); // Consumiamo il carattere newline
+        System.out.print("Inserisci la categoria della spesa: ");
+        String category = scanner.nextLine();
+
+        Expense newExpense = new Expense(description, amount, category);
+        expenses.add(newExpense);
+        System.out.println("Spesa aggiunta con successo!");
+    }
+
+    private static void viewExpenses() {
+        // Commenti:
+        // 8. Definiamo un metodo per visualizzare tutte le spese memorizzate.
+        // 9. Stampiamo i dettagli di ogni spesa nell'ArrayList.
+        System.out.println("\nTutte le Spese:");
+        for (Expense expense : expenses) {
+            System.out.println("Descrizione: " + expense.getDescription());
+            System.out.println("Importo: " + expense.getAmount() + " €");
+            System.out.println("Categoria: " + expense.getCategory());
+            System.out.println("------------------");
+        }
+    }
+
+    private static void viewExpensesByCategory() {
+        // Commenti:
+        // 10. Definiamo un metodo per visualizzare le spese raggruppate per categoria.
+        // 11. Creiamo un HashMap per tenere traccia delle spese per categoria.
+        // 12. Scorriamo l'ArrayList delle spese e aggiungiamo ogni spesa al totale della sua categoria.
+        // 13. Stampiamo i totali per ogni categoria.
+        System.out.println("\nSpese per Categoria:");
+        double totalExpenses = 0.0;
+        double totalByCatergory = 0.0;
+        ArrayList<String> categories = new ArrayList<>();
+
+        for (Expense expense : expenses) {
+            String category = expense.getCategory();
+            double amount = expense.getAmount();
+
+            if (!categories.contains(category)) {
+                categories.add(category);
+            }
+
+            totalExpenses += amount;
+            totalByCatergory = 0.0;
+            for (String cat : categories) {
+                if (cat.equals(category)) {
+                    totalByCatergory += amount;
+                }
+            }
+            System.out.println(category + ": " + totalByCatergory + " €");
+        }
+
+        System.out.println("\nSpese Totali: " + totalExpenses + " €");
+    }
+
+    private static void calculateTotalExpenses() {
+        // Commenti:
+        // 14. Definiamo un metodo per calcolare le spese totali.
+        // 15. Scorriamo l'ArrayList delle spese e sommiamo tutti gli importi.
+        // 16. Stampiamo il totale delle spese.
+        double totalExpenses = 0.0;
+        for (Expense expense : expenses) {
+            totalExpenses += expense.getAmount();
+        }
+        System.out.println("\nSPESE TOTALI: " + totalExpenses + " €");
+    }
+}
